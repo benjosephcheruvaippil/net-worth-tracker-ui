@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bars } from "react-loader-spinner";
 
-export default function AssetForm({ onButtonClick, passedData }) {
+export default function AssetForm({ onButtonClick, passedData, onSuccess, onCancel }) {
 
 
     // State variables for form fields
@@ -59,7 +59,7 @@ export default function AssetForm({ onButtonClick, passedData }) {
     }, []);
 
     useEffect(() => {
-        if (passedData.amount != undefined) {
+        if (passedData && passedData.amount != undefined) {
             //console.log("Assets passed from parent: ", passedData.amount);
             console.log("Assets passed from parent: ", passedData);
             setInvestmentId(passedData.assetDetailId);
@@ -115,14 +115,21 @@ export default function AssetForm({ onButtonClick, passedData }) {
                         .then(response => {
                             console.log(response.data);
                             if (response.data != null) {
-                                alert("Sucess");
+                                alert("Success");
+                                // Call onSuccess to close modal and refresh data
+                                if (onSuccess) {
+                                    onSuccess();
+                                }
+                                // Also call onButtonClick if it exists (for backwards compatibility)
+                                if (onButtonClick) {
+                                    onButtonClick();
+                                }
                             }
                         })
                         .catch(error => {
                             console.error("Error: ", error);
                             alert("Operation failed!!");
                         });
-                    await onButtonClick();
                 }
                 setSubmitClicked(false);
                 setIsLoading(false);
@@ -130,7 +137,7 @@ export default function AssetForm({ onButtonClick, passedData }) {
         };
 
         onSubmit();
-    }, [isSubmitClicked]);
+    }, [isSubmitClicked, postData, onSuccess, onButtonClick]);
 
 
     const fetchUsers = async () => {
@@ -217,6 +224,14 @@ export default function AssetForm({ onButtonClick, passedData }) {
         setRemarks('');
     };
 
+    const handleCancel = (e) => {
+        e.preventDefault();
+        // Call onCancel to close the modal
+        if (onCancel) {
+            onCancel();
+        }
+    };
+
     // Form submission handler (you can customize this)
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -242,89 +257,278 @@ export default function AssetForm({ onButtonClick, passedData }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                <input type="number" name="InvestmentId" hidden="true" value={investmentId} onChange={handleInvestmentId} />
-            </label>
-            <label>
-                Investment Entity:
-                <input type="text" name="InvestmentEntity" value={investmentEntity} onChange={handleInvestmentEntity} />
-            </label>
-            <br />
-            <label>
-                Investment Type:
-                <select name="InvestmentTypeId" value={investmentType} onChange={handleInvestmentType}>
-                    <option value="0">Select an option</option>
-                    {investmentTypeData.map((option) => (
-                        <option key={option.investmentTypeId} value={option.investmentTypeId}>
-                            {option.investmentType}
-                        </option>
-                    ))}
-                </select>
-            </label>
-            <br />
-            <label>
-                Amount :
-                <input type="number" name="Amount" value={amount} onChange={handleAmount} />
-            </label>
-            <br />
-            {isFixedIncomeVisible &&
-                <label>
-                    Interest Rate :
-                    <input type="number" name="InterestRate" value={interestRate} onChange={handleInterestRate} />
-                </label>}
-            <br />
-            {isFixedIncomeVisible &&
-                <label>
-                    Interest Frequency :
-                    <input type="text" name="InterestFrequency" value={interestFrequency} onChange={handleInterestFrequency} />
-                </label>}
-            <br />
-            <label>
-                User Id :
-                <select name="UserId" value={userId} onChange={handleUser}>
-                    <option value="0">Select an option</option>
-                    {usersData.map((option) => (
-                        <option key={option.userId} value={option.userId}>
-                            {option.userName}
-                        </option>
-                    ))}
-                </select>
-            </label>
-            <br />
-            {isFixedIncomeVisible &&
-                <label>
-                    Start Date:
-                    <input type="date" name="StartDate" value={startDate} onChange={handleStartDate} />
-                </label>}
-            <br />
-            {isFixedIncomeVisible &&
-                <label>
-                    Maturity Date:
-                    <input type="date" name="MaturityDate" value={maturityDate} onChange={handleMaturityDate} />
-                </label>}
-            <br />
-            {!isFixedIncomeVisible &&
-                <label>
-                    As Of Date:
-                    <input type="date" name="AsOfDate" value={asOfDate} onChange={handleAsOfDate} />
-                </label>}
-            <br />
-            <label>
-                Remarks:
-                <input type="text" name="Remarks" value={remarks} onChange={handleRemarks} />
-            </label>
+        <div style={{ maxWidth: '600px' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <label style={{ display: 'none' }}>
+                    <input type="number" name="InvestmentId" hidden="true" value={investmentId} onChange={handleInvestmentId} />
+                </label>
+                
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                        Investment Entity:
+                    </label>
+                    <input 
+                        type="text" 
+                        name="InvestmentEntity" 
+                        value={investmentEntity} 
+                        onChange={handleInvestmentEntity}
+                        style={{
+                            padding: '8px',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            fontSize: '14px'
+                        }}
+                    />
+                </div>
 
-            <br />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                        Investment Type:
+                    </label>
+                    <select 
+                        name="InvestmentTypeId" 
+                        value={investmentType} 
+                        onChange={handleInvestmentType}
+                        style={{
+                            padding: '8px',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            fontSize: '14px'
+                        }}
+                    >
+                        <option value="0">Select an option</option>
+                        {investmentTypeData.map((option) => (
+                            <option key={option.investmentTypeId} value={option.investmentTypeId}>
+                                {option.investmentType}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-            <button type="submit">Save</button>
-            <button onClick={clear}>Clear</button>
-            {isLoading ? (<div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <Bars
-                    height="80"
-                    width="80"
-                    color="#4fa94d"
-                /></div>) : ""}
-        </form>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                        Amount:
+                    </label>
+                    <input 
+                        type="number" 
+                        name="Amount" 
+                        value={amount} 
+                        onChange={handleAmount}
+                        style={{
+                            padding: '8px',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            fontSize: '14px'
+                        }}
+                    />
+                </div>
+
+                {isFixedIncomeVisible && (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                            Interest Rate:
+                        </label>
+                        <input 
+                            type="number" 
+                            name="InterestRate" 
+                            value={interestRate} 
+                            onChange={handleInterestRate}
+                            style={{
+                                padding: '8px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+                )}
+
+                {isFixedIncomeVisible && (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                            Interest Frequency:
+                        </label>
+                        <input 
+                            type="text" 
+                            name="InterestFrequency" 
+                            value={interestFrequency} 
+                            onChange={handleInterestFrequency}
+                            style={{
+                                padding: '8px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+                )}
+
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                        User:
+                    </label>
+                    <select 
+                        name="UserId" 
+                        value={userId} 
+                        onChange={handleUser}
+                        style={{
+                            padding: '8px',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            fontSize: '14px'
+                        }}
+                    >
+                        <option value="0">Select an option</option>
+                        {usersData.map((option) => (
+                            <option key={option.userId} value={option.userId}>
+                                {option.userName}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {isFixedIncomeVisible && (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                            Start Date:
+                        </label>
+                        <input 
+                            type="date" 
+                            name="StartDate" 
+                            value={startDate} 
+                            onChange={handleStartDate}
+                            style={{
+                                padding: '8px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+                )}
+
+                {isFixedIncomeVisible && (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                            Maturity Date:
+                        </label>
+                        <input 
+                            type="date" 
+                            name="MaturityDate" 
+                            value={maturityDate} 
+                            onChange={handleMaturityDate}
+                            style={{
+                                padding: '8px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+                )}
+
+                {!isFixedIncomeVisible && (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                            As Of Date:
+                        </label>
+                        <input 
+                            type="date" 
+                            name="AsOfDate" 
+                            value={asOfDate} 
+                            onChange={handleAsOfDate}
+                            style={{
+                                padding: '8px',
+                                border: '1px solid #ddd',
+                                borderRadius: '4px',
+                                fontSize: '14px'
+                            }}
+                        />
+                    </div>
+                )}
+
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                        Remarks:
+                    </label>
+                    <input 
+                        type="text" 
+                        name="Remarks" 
+                        value={remarks} 
+                        onChange={handleRemarks}
+                        style={{
+                            padding: '8px',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            fontSize: '14px'
+                        }}
+                    />
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '10px' }}>
+                    <button 
+                        type="button"
+                        onClick={handleCancel}
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#6c757d',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '14px'
+                        }}
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        onClick={clear}
+                        type="button"
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#ffc107',
+                            color: '#000',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '14px'
+                        }}
+                    >
+                        Clear
+                    </button>
+                    <button 
+                        type="submit"
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#28a745',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '14px'
+                        }}
+                    >
+                        Save
+                    </button>
+                </div>
+
+                {isLoading && (
+                    <div style={{ 
+                        width: "100%", 
+                        height: "100%", 
+                        display: "flex", 
+                        justifyContent: "center", 
+                        alignItems: "center",
+                        padding: '20px'
+                    }}>
+                        <Bars
+                            height="80"
+                            width="80"
+                            color="#4fa94d"
+                        />
+                    </div>
+                )}
+            </form>
+        </div>
     );
 };

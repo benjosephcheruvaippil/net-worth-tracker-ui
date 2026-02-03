@@ -93,25 +93,44 @@ const AssetDetails = () => {
     };
 
     return (
-        <div>
-            <Box sx={{ height: 400, width: '100%' }}>
+        <div style={{ padding: '10px' }}>
+            <Box sx={{ width: '100%' }}>
                 {/* Header with Title and Add Button */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <h1>Asset Report</h1>
+                <Box sx={{ 
+                    display: 'flex', 
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    justifyContent: 'space-between', 
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                    gap: 2,
+                    mb: 2 
+                }}>
+                    <h1 style={{ margin: 0, fontSize: 'clamp(1.5rem, 5vw, 2rem)' }}>Asset Report</h1>
                     <Button 
                         variant="contained" 
                         color="primary"
                         onClick={handleOpenModal}
-                        sx={{ height: 'fit-content' }}
+                        sx={{ 
+                            height: 'fit-content',
+                            width: { xs: '100%', sm: 'auto' },
+                            whiteSpace: 'nowrap'
+                        }}
                     >
                         Add New Asset
                     </Button>
                 </Box>
 
                 {loading ? (
-                    <Bars height="50" width="50" color="#4fa94d" ariaLabel="loading" />
+                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                        <Bars height="50" width="50" color="#4fa94d" ariaLabel="loading" />
+                    </Box>
                 ) : (
-                    <Box sx={{ height: 500, maxWidth: '100%', overflowX: 'auto' }}>
+                    <Box sx={{ 
+                        height: { xs: 400, sm: 500, md: 600 }, 
+                        width: '100%',
+                        '& .MuiDataGrid-root': {
+                            fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                        }
+                    }}>
                         <DataGrid
                             rows={data}
                             columns={columns}
@@ -119,10 +138,15 @@ const AssetDetails = () => {
                             rowsPerPageOptions={[5, 10, 25, 50]}
                             pagination
                             sx={{
-                                minWidth: '600px',
                                 '& .MuiDataGrid-columnHeaders': {
                                     backgroundColor: '#f5f5f5',
                                 },
+                                '& .MuiDataGrid-cell': {
+                                    padding: { xs: '8px 4px', sm: '8px 16px' }
+                                },
+                                '& .MuiDataGrid-columnHeader': {
+                                    padding: { xs: '8px 4px', sm: '8px 16px' }
+                                }
                             }}
                         />
                     </Box>
@@ -154,6 +178,14 @@ const AssetDetails = () => {
                     justify-content: center;
                     z-index: 9999;
                     animation: fadeIn 0.2s ease-in;
+                    padding: 0;
+                    overflow-y: auto;
+                }
+
+                @media (min-width: 600px) {
+                    .modal-overlay {
+                        padding: 20px;
+                    }
                 }
 
                 @keyframes fadeIn {
@@ -167,15 +199,25 @@ const AssetDetails = () => {
 
                 .modal-content {
                     background: white;
-                    padding: 30px;
-                    border-radius: 8px;
+                    padding: 15px;
+                    border-radius: 0;
                     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
                     max-width: 600px;
-                    width: 90%;
-                    max-height: 90vh;
+                    width: 100%;
+                    max-height: 100vh;
                     overflow-y: auto;
+                    overflow-x: hidden;
                     position: relative;
                     animation: slideDown 0.3s ease-out;
+                    box-sizing: border-box;
+                }
+
+                @media (min-width: 600px) {
+                    .modal-content {
+                        padding: 30px;
+                        border-radius: 8px;
+                        max-height: 90vh;
+                    }
                 }
 
                 @keyframes slideDown {
@@ -191,11 +233,11 @@ const AssetDetails = () => {
 
                 .modal-close {
                     position: absolute;
-                    top: 10px;
-                    right: 10px;
+                    top: 8px;
+                    right: 8px;
                     background: none;
                     border: none;
-                    font-size: 32px;
+                    font-size: 28px;
                     cursor: pointer;
                     color: #666;
                     line-height: 1;
@@ -212,8 +254,23 @@ const AssetDetails = () => {
 
                 .modal-content h2 {
                     margin-top: 0;
-                    margin-bottom: 20px;
+                    margin-bottom: 15px;
                     color: #333;
+                    font-size: 1.25rem;
+                    padding-right: 35px;
+                    word-wrap: break-word;
+                }
+
+                @media (min-width: 600px) {
+                    .modal-content h2 {
+                        margin-bottom: 20px;
+                        font-size: 1.75rem;
+                    }
+                    .modal-close {
+                        font-size: 32px;
+                        top: 10px;
+                        right: 10px;
+                    }
                 }
             `}</style>
         </div>

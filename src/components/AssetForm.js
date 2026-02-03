@@ -256,15 +256,22 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
         setSubmitClicked(true);
     };
 
-    return (
-        <div style={{ maxWidth: '600px' }}>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <label style={{ display: 'none' }}>
-                    <input type="number" name="InvestmentId" hidden="true" value={investmentId} onChange={handleInvestmentId} />
-                </label>
-                
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+ return (
+    <div style={{ width: '100%', overflow: 'hidden' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+            <label style={{ display: 'none' }}>
+                <input type="number" name="InvestmentId" hidden="true" value={investmentId} onChange={handleInvestmentId} />
+            </label>
+            
+            {/* 2-column grid for form fields */}
+            <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: '1fr 1fr', 
+                gap: '12px',
+                width: '100%'
+            }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                         Investment Entity:
                     </label>
                     <input 
@@ -276,13 +283,16 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                             padding: '8px',
                             border: '1px solid #ddd',
                             borderRadius: '4px',
-                            fontSize: '14px'
+                            fontSize: '16px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            maxWidth: '100%'
                         }}
                     />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                         Investment Type:
                     </label>
                     <select 
@@ -293,10 +303,15 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                             padding: '8px',
                             border: '1px solid #ddd',
                             borderRadius: '4px',
-                            fontSize: '14px'
+                            fontSize: '16px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            maxWidth: '100%'
                         }}
                     >
                         <option value="0">Select an option</option>
+                        <option value="1">Bank</option>
+                        <option value="2">NCD</option>
                         {investmentTypeData.map((option) => (
                             <option key={option.investmentTypeId} value={option.investmentTypeId}>
                                 {option.investmentType}
@@ -305,8 +320,8 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                     </select>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                         Amount:
                     </label>
                     <input 
@@ -318,14 +333,17 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                             padding: '8px',
                             border: '1px solid #ddd',
                             borderRadius: '4px',
-                            fontSize: '14px'
+                            fontSize: '16px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            maxWidth: '100%'
                         }}
                     />
                 </div>
 
                 {isFixedIncomeVisible && (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                             Interest Rate:
                         </label>
                         <input 
@@ -337,15 +355,18 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                                 padding: '8px',
                                 border: '1px solid #ddd',
                                 borderRadius: '4px',
-                                fontSize: '14px'
+                                fontSize: '16px',
+                                width: '100%',
+                                boxSizing: 'border-box',
+                                maxWidth: '100%'
                             }}
                         />
                     </div>
                 )}
 
                 {isFixedIncomeVisible && (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                             Interest Frequency:
                         </label>
                         <input 
@@ -357,14 +378,17 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                                 padding: '8px',
                                 border: '1px solid #ddd',
                                 borderRadius: '4px',
-                                fontSize: '14px'
+                                fontSize: '16px',
+                                width: '100%',
+                                boxSizing: 'border-box',
+                                maxWidth: '100%'
                             }}
                         />
                     </div>
                 )}
 
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                         User:
                     </label>
                     <select 
@@ -375,7 +399,10 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                             padding: '8px',
                             border: '1px solid #ddd',
                             borderRadius: '4px',
-                            fontSize: '14px'
+                            fontSize: '16px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            maxWidth: '100%'
                         }}
                     >
                         <option value="0">Select an option</option>
@@ -388,8 +415,8 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                 </div>
 
                 {isFixedIncomeVisible && (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                             Start Date:
                         </label>
                         <input 
@@ -401,15 +428,18 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                                 padding: '8px',
                                 border: '1px solid #ddd',
                                 borderRadius: '4px',
-                                fontSize: '14px'
+                                fontSize: '16px',
+                                width: '100%',
+                                boxSizing: 'border-box',
+                                maxWidth: '100%'
                             }}
                         />
                     </div>
                 )}
 
                 {isFixedIncomeVisible && (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                             Maturity Date:
                         </label>
                         <input 
@@ -421,15 +451,18 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                                 padding: '8px',
                                 border: '1px solid #ddd',
                                 borderRadius: '4px',
-                                fontSize: '14px'
+                                fontSize: '16px',
+                                width: '100%',
+                                boxSizing: 'border-box',
+                                maxWidth: '100%'
                             }}
                         />
                     </div>
                 )}
 
                 {!isFixedIncomeVisible && (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                             As Of Date:
                         </label>
                         <input 
@@ -441,14 +474,17 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                                 padding: '8px',
                                 border: '1px solid #ddd',
                                 borderRadius: '4px',
-                                fontSize: '14px'
+                                fontSize: '16px',
+                                width: '100%',
+                                boxSizing: 'border-box',
+                                maxWidth: '100%'
                             }}
                         />
                     </div>
                 )}
 
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <label style={{ marginBottom: '5px', fontWeight: '500' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <label style={{ marginBottom: '5px', fontWeight: '500', fontSize: '14px' }}>
                         Remarks:
                     </label>
                     <input 
@@ -460,75 +496,96 @@ export default function AssetForm({ onButtonClick, passedData, onSuccess, onCanc
                             padding: '8px',
                             border: '1px solid #ddd',
                             borderRadius: '4px',
-                            fontSize: '14px'
+                            fontSize: '16px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            maxWidth: '100%'
                         }}
                     />
                 </div>
+            </div>
 
-                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '10px' }}>
-                    <button 
-                        type="button"
-                        onClick={handleCancel}
-                        style={{
-                            padding: '10px 20px',
-                            backgroundColor: '#6c757d',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '14px'
-                        }}
-                    >
-                        Cancel
-                    </button>
+            {/* Buttons section - remains full width */}
+            <div style={{ 
+                display: 'flex', 
+                flexDirection: 'column',
+                gap: '10px', 
+                marginTop: '10px',
+                width: '100%'
+            }}>
+                <button 
+                    type="submit"
+                    style={{
+                        padding: '12px 20px',
+                        backgroundColor: '#28a745',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        width: '100%',
+                        boxSizing: 'border-box'
+                    }}
+                >
+                    Save
+                </button>
+                <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
                     <button 
                         onClick={clear}
                         type="button"
                         style={{
-                            padding: '10px 20px',
+                            padding: '12px 20px',
                             backgroundColor: '#ffc107',
                             color: '#000',
                             border: 'none',
                             borderRadius: '4px',
                             cursor: 'pointer',
-                            fontSize: '14px'
+                            fontSize: '16px',
+                            fontWeight: '500',
+                            flex: 1,
+                            boxSizing: 'border-box'
                         }}
                     >
                         Clear
                     </button>
                     <button 
-                        type="submit"
+                        type="button"
+                        onClick={handleCancel}
                         style={{
-                            padding: '10px 20px',
-                            backgroundColor: '#28a745',
+                            padding: '12px 20px',
+                            backgroundColor: '#6c757d',
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
                             cursor: 'pointer',
-                            fontSize: '14px'
+                            fontSize: '16px',
+                            fontWeight: '500',
+                            flex: 1,
+                            boxSizing: 'border-box'
                         }}
                     >
-                        Save
+                        Cancel
                     </button>
                 </div>
+            </div>
 
-                {isLoading && (
-                    <div style={{ 
-                        width: "100%", 
-                        height: "100%", 
-                        display: "flex", 
-                        justifyContent: "center", 
-                        alignItems: "center",
-                        padding: '20px'
-                    }}>
-                        <Bars
-                            height="80"
-                            width="80"
-                            color="#4fa94d"
-                        />
-                    </div>
-                )}
-            </form>
-        </div>
+            {isLoading && (
+                <div style={{ 
+                    width: "100%", 
+                    display: "flex", 
+                    justifyContent: "center", 
+                    alignItems: "center",
+                    padding: '20px'
+                }}>
+                    <Bars
+                        height="60"
+                        width="60"
+                        color="#4fa94d"
+                    />
+                </div>
+            )}
+        </form>
+    </div>
     );
 };

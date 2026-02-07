@@ -25,17 +25,17 @@ const Modal = ({ isOpen, onClose, children }) => {
 const AssetDetails = () => {
 
     const columns = [
-        { field: 'id', headerName: 'AssetId', width: 100 },
-        { field: 'investmentEntity', headerName: 'InvestmentEntity', width: 100 },
-        { field: 'investmentType', headerName: 'Type', width: 100 },
-        { field: 'amount', headerName: 'Amount', width: 100 },
-        { field: 'interestRate', headerName: 'InterestRate', width: 100 },
-        { field: 'interestFrequency', headerName: 'InterestFrequency', width: 100 },
-        { field: 'userId', headerName: 'UserId', width: 100 },
-        { field: 'startDate', headerName: 'StartDate', width: 100 },
-        { field: 'maturityDate', headerName: 'MaturityDate', width: 100 },
-        { field: 'asOfDate', headerName: 'AsOfDate', width: 100 },
-        { field: 'remarks', headerName: 'Remarks', width: 100 },
+        // { field: 'id', headerName: 'AssetId', width: 100 },
+        { field: 'investmentEntity', headerName: 'Investment Entity', width: 200 },
+        { field: 'investmentType', headerName: 'Type', width: 200 },
+        { field: 'amount', headerName: 'Amount', width: 150 },
+        { field: 'interestRate', headerName: 'Interest Rate', width: 100 },
+        { field: 'interestFrequency', headerName: 'Interest Frequency', width: 100 },
+        // { field: 'userId', headerName: 'UserId', width: 100 },
+        // { field: 'startDate', headerName: 'StartDate', width: 100 },
+        // { field: 'maturityDate', headerName: 'MaturityDate', width: 100 },
+        // { field: 'asOfDate', headerName: 'AsOfDate', width: 100 },
+        { field: 'remarks', headerName: 'Remarks', width: 220 },
     ];
 
     const [data, setData] = useState([]);
@@ -134,18 +134,29 @@ const AssetDetails = () => {
                         <DataGrid
                             rows={data}
                             columns={columns}
-                            pageSize={10}
+                            initialState={{
+                                pagination:{
+                                    paginationModel:{pageSize:10,page:0},
+                                }
+                            }}
                             rowsPerPageOptions={[5, 10, 25, 50]}
-                            pagination
                             sx={{
                                 '& .MuiDataGrid-columnHeaders': {
                                     backgroundColor: '#f5f5f5',
+                                    maxHeight: 'none !important',
                                 },
                                 '& .MuiDataGrid-cell': {
                                     padding: { xs: '8px 4px', sm: '8px 16px' }
                                 },
                                 '& .MuiDataGrid-columnHeader': {
-                                    padding: { xs: '8px 4px', sm: '8px 16px' }
+                                    padding: { xs: '8px 4px', sm: '8px 16px' },
+                                    height: 'auto !important',
+                                    minHeight: '56px !important',
+                                },
+                                '& .MuiDataGrid-columnHeaderTitle': {
+                                    overflow: 'visible',
+                                    lineHeight: '1.2rem',
+                                    whiteSpace: 'normal',
                                 }
                             }}
                         />

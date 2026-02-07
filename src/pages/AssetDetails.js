@@ -157,6 +157,7 @@ const AssetDetails = () => {
                                     overflow: 'visible',
                                     lineHeight: '1.2rem',
                                     whiteSpace: 'normal',
+                                    fontWeight: 'bold',
                                 }
                             }}
                         />
